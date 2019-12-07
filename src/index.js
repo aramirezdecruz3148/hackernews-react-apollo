@@ -22,8 +22,8 @@ ReactDOM.render(
   <BrowserRouter>
     <ApolloProvider client={client}>
       <App />
-    </ApolloProvider>, document.getElementById('root')
-  </BrowserRouter>
+    </ApolloProvider>
+  </BrowserRouter>, document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change
