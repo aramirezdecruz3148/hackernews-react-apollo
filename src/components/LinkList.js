@@ -4,26 +4,27 @@ import gql from 'graphql-tag';
 import Link from './Link';
 
 export const FEED_QUERY = gql`
-{
-  feed {
-    links {
-      id
-      createdAt
-      url
-      description
-      postedBy {
+  query FeedQuery($first: Int, $skip: Int, $orderBy: LinkOrderByInput) {
+    feed(first: $first, skip: $skip, orderBy: $orderBy) {
+      links {
         id
-        name
-      }
-      votes {
-        id
-        user {
+        createdAt
+        url
+        description
+        postedBy {
           id
+          name
+        }
+        votes {
+          id
+          user {
+            id
+          }
         }
       }
+      count
     }
   }
-}
 `;
 
 const NEW_LINKS_SUBSCRIPTION = gql`
@@ -108,6 +109,16 @@ class LinkList extends Component {
     subscribeToMore({
       document: NEW_VOTES_SUBSCRIPTION 
     });
+  }
+
+  _getQueryVariables = () => {
+    const isNewPage = this.props.location.pathname.includes('new');
+    const page = parseInt(this.props.match.params.page, 10);
+    
+    const skip = isNewPage ? (page - 1) * LINKS_PER_PAGE : 0;
+    const first = isNewPage ? LINKS_PER_PAGE : 100;
+    const orderBy = isNewPage ? 'createdAt_DESC' : null;
+    return { first, skip, orderBy };
   }
 
   render() {
