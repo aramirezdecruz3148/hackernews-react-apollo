@@ -124,7 +124,7 @@ class LinkList extends Component {
   render() {
 
     return (
-      <Query query={FEED_QUERY}>
+      <Query query={FEED_QUERY} variables={this._getQueryVariables}>
         {({ loading, error, data, subscribeToMore }) => {
           if (loading) return <div>Fetching</div>
           if (error) return <div>Error</div>
